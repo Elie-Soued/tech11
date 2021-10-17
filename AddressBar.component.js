@@ -18,9 +18,9 @@ template.innerHTML = `
 
         <div>
             <label>ZIP</label>
-            <input></input>
+            <input id="zip"></input>
             <label>City</label>
-            <input class="mediumSize"></input>
+            <input class="mediumSize" id="city"></input>
         </div>
 
         <div>
@@ -35,9 +35,11 @@ template.innerHTML = `
             <input id="country"></input>
         </div>
 
-        <button>info</button>
+    
 
     </form>
+
+    <button type="submit">Info</button>
 
 `;
 
@@ -46,6 +48,28 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+
+  connectedCallback() {
+    this.shadowRoot.getElementById("zip").addEventListener(
+      "change",
+
+      (e) => {
+        let xmlReq = new XMLHttpRequest();
+        xmlReq.open("GET", `http://api.zippopotam.us/DE/${e.target.value}`);
+
+        xmlReq.onload = () => {
+          const data = JSON.parse(xmlReq.response);
+
+          this.shadowRoot.getElementById("city").value =
+            data.places[0]["place name"];
+
+          this.shadowRoot.getElementById("country").value = data.country;
+        };
+
+        xmlReq.send();
+      }
+    );
   }
 }
 
