@@ -3,6 +3,11 @@ template.innerHTML = `
 
 <style>
 
+
+.smallSize{
+  width:20%;
+}
+
 .mediumSize{
     width:40%;
 }
@@ -20,7 +25,9 @@ template.innerHTML = `
             <label>ZIP</label>
             <input id="zip"></input>
             <label>City</label>
-            <input class="mediumSize" id="city"></input>
+            <input class="smallSize" id="city"></input>
+            <label>District</label>
+            <select class="mediumSize"  id="district"></select>
         </div>
 
         <div>
@@ -50,48 +57,52 @@ class Address extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 
+  sendHttpRequest(method, url) {
+    const promise = new Promise((resolve) => {
+      const xmlReq = new XMLHttpRequest();
+      xmlReq.open(method, url);
+      xmlReq.responseType = "json";
+
+      xmlReq.onload = () => {
+        resolve(xmlReq.response);
+      };
+      xmlReq.send();
+    });
+    return promise;
+  }
+
   connectedCallback() {
     this.shadowRoot.getElementById("zip").addEventListener(
       "change",
 
-      //First Api call to set The city and the country
       (e) => {
-        let xmlReq = new XMLHttpRequest();
-        xmlReq.open("GET", `http://api.zippopotam.us/DE/${e.target.value}`);
+        this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
+        .then((response) => {
+          console.log(response)
+          let city = this.shadowRoot.getElementById("city").value;
+          let country = this.shadowRoot.getElementById("country").value;
+          let zip = this.shadowRoot.getElementById("zip").value;
+          
+          city = response.places[0]["place name"];
+          country = response.country;
+          zip = response["post code"]
+         
+          const newURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city}&plz_plz=${zip}&plz_city_clear=${city}&plz_district=&finda=plz&plz_street=&lang=de_DE`;
 
-        xmlReq.onload = () => {
-          const data = JSON.parse(xmlReq.response);
-          this.shadowRoot.getElementById("city").value =
-            data.places[0]["place name"];
+          this.sendHttpRequest("POST", newURL).then((response) => {
 
-          this.shadowRoot.getElementById("country").value = data.country;
-
-          //Second Api call to set The street per city
-          let http = new XMLHttpRequest();
-          let url = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?autocomplete=plz&plz_city=${
-            this.shadowRoot.getElementById("city").value
-          }`;
-
-          http.open("POST", url, true);
-
-          http.setRequestHeader(
-            // "Access-Control-Allow-Origin",
-            "Content-type",
-            "application/x-www-form-urlencoded"
-          );
-
-          http.onreadystatechange = function () {
-            if (http.readyState == 4 && http.status == 200) {
-              console.log(JSON.parse(http.response));
+            for(let i = 0; i<response.rows.length;i++){
+              console.log(response.rows[i].district);
             }
-          };
-          http.send();
-        };
 
-        xmlReq.send();
+            
+          });
+        });
       }
     );
   }
 }
 
 window.customElements.define("app-address", Address);
+
+
