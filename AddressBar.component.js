@@ -32,7 +32,7 @@ template.innerHTML = `
 
         <div>
             <label>Street</label>
-            <select class="mediumSize"></select>
+            <select class="mediumSize" id="street"></select>
             <label>House Number</label>
             <input></input>
         </div>
@@ -43,10 +43,10 @@ template.innerHTML = `
         </div>
 
     
-
+       
     </form>
 
-    <button type="submit">Info</button>
+    <button type="submit" id="submit">Info</button>
 
 `;
 
@@ -72,34 +72,55 @@ class Address extends HTMLElement {
   }
 
   connectedCallback() {
-    this.shadowRoot.getElementById("zip").addEventListener(
-      "change",
+   
 
-      (e) => {
+  
+
+      const onTypingZipCode = (e) => {   
+        //First api call to get the city, country and zip code
         this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
         .then((response) => {
-          console.log(response)
-          let city = this.shadowRoot.getElementById("city").value;
-          let country = this.shadowRoot.getElementById("country").value;
-          let zip = this.shadowRoot.getElementById("zip").value;
-          
-          city = response.places[0]["place name"];
-          country = response.country;
-          zip = response["post code"]
-         
-          const newURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city}&plz_plz=${zip}&plz_city_clear=${city}&plz_district=&finda=plz&plz_street=&lang=de_DE`;
+          this.shadowRoot.getElementById("city").value = response.places[0]["place name"];
+          this.shadowRoot.getElementById("country").value = response.country;
+          this.shadowRoot.getElementById("zip").value = response["post code"];
+        
+          const newURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${this.shadowRoot.getElementById("city").value }&plz_plz=${this.shadowRoot.getElementById("zip").value}&plz_city_clear=${this.shadowRoot.getElementById("city").value }&plz_district=&finda=plz&plz_street=&lang=de_DE`;
 
+          //Second api call to get the district
           this.sendHttpRequest("POST", newURL).then((response) => {
-
-            for(let i = 0; i<response.rows.length;i++){
-              console.log(response.rows[i].district);
-            }
-
-            
-          });
+             for(let i = 0; i<response.rows.length;i++){
+              this.shadowRoot.getElementById("district").add(new Option(response.rows[i].district))
+             }
+          }
+         
+          );
         });
       }
-    );
+    
+
+    const onSelect_District = (domEvent)=> {
+      let selectedDistrict = domEvent.target[domEvent.target.selectedIndex].value; 
+      let pilouURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${this.shadowRoot.getElementById("city").value }&plz_plz=${this.shadowRoot.getElementById("zip").value}&plz_city_clear=${this.shadowRoot.getElementById("city").value }&plz_district=${selectedDistrict}&finda=plz&plz_street=&lang=de_DE`;
+      
+      //Third api call to get the Streets
+      this.sendHttpRequest("POST", pilouURL).then((response)=>{
+        this.shadowRoot.getElementById("street").options.length = 0;
+          
+        if(response.rows){
+          for(let i =0; i<response.rows.length;i++){
+            this.shadowRoot.getElementById("street").add(new Option(response.rows[i].street))
+            }
+        }else{
+          this.shadowRoot.getElementById("street").add(new Option("No data Available"))
+        }
+      })
+    }
+
+
+    this.shadowRoot.getElementById("zip").addEventListener("change", onTypingZipCode)
+    this.shadowRoot.getElementById("district").addEventListener("change",onSelect_District)
+    this.shadowRoot.getElementById("submit").addEventListener("click",()=>{console.log("salut")})
+
   }
 }
 
