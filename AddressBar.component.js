@@ -18,35 +18,69 @@ template.innerHTML = `
 
 </style>
 
-    <form>
+    <form id="form">
         <h3> Address </h3>
 
         <div>
             <label>ZIP</label>
-            <input id="zip"></input>
+              <input
+               type="number"
+               id="zip"
+               name="zip"
+               />
+            
             <label>City</label>
-            <input class="smallSize" id="city"></input>
+              <input 
+                 type="text"
+                 class="smallSize"
+                 id="city"
+                 name="city"
+                 />
+               
+            
             <label>District</label>
-            <select class="mediumSize"  id="district"></select>
+            <select 
+              class="mediumSize"
+              id="district"
+              name="district">
+            </select>
         </div>
 
         <div>
             <label>Street</label>
-            <select class="mediumSize" id="street"></select>
-            <label>House Number</label>
-            <input></input>
+            <select
+              class="mediumSize"
+              id="street"
+              name="street">
+             </select>
+            
+             <label>House Number</label>
+            <input
+              type="text"
+              id="houseNumber"
+              name="houseNumber"
+              
+              
+        
+            />
         </div>
 
         <div>
             <label>Country</label>
-            <input id="country"></input>
+            <input 
+             id="country"
+             name ="country"
+            
+             
+       />
+             
         </div>
-
-    
-       
+     
     </form>
+    <button   id="submit" disabled >Info</button>
 
-    <button type="submit" id="submit">Info</button>
+
+
 
 `;
 
@@ -58,72 +92,138 @@ class Address extends HTMLElement {
   }
 
   sendHttpRequest(method, url) {
-    const promise = new Promise((resolve) => {
+    const promise = new Promise((resolve, reject) => {
       const xmlReq = new XMLHttpRequest();
       xmlReq.open(method, url);
       xmlReq.responseType = "json";
-
-      xmlReq.onload = () => {
-        resolve(xmlReq.response);
-      };
-      xmlReq.send();
+      if (url) {
+        xmlReq.onload = () => {
+          resolve(xmlReq.response);
+        };
+        xmlReq.send();
+      } else {
+        reject();
+      }
     });
     return promise;
   }
 
   connectedCallback() {
-   
-
-  
-
-      const onTypingZipCode = (e) => {   
-        //First api call to get the city, country and zip code
-        this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
-        .then((response) => {
-          this.shadowRoot.getElementById("city").value = response.places[0]["place name"];
-          this.shadowRoot.getElementById("country").value = response.country;
-          this.shadowRoot.getElementById("zip").value = response["post code"];
-        
-          const newURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${this.shadowRoot.getElementById("city").value }&plz_plz=${this.shadowRoot.getElementById("zip").value}&plz_city_clear=${this.shadowRoot.getElementById("city").value }&plz_district=&finda=plz&plz_street=&lang=de_DE`;
-
-          //Second api call to get the district
-          this.sendHttpRequest("POST", newURL).then((response) => {
-             for(let i = 0; i<response.rows.length;i++){
-              this.shadowRoot.getElementById("district").add(new Option(response.rows[i].district))
-             }
-          }
-         
-          );
-        });
+    const onTypingZipCode = (e) => {
+      if (e.target.value < 1067 || e.target.value > 99998) {
+        alert("Zip code should be between 01067 and 99998");
+        clearForm();
+      } else {
+        this.sendHttpRequest(
+          "GET",
+          `http://api.zippopotam.us/DE/${e.target.value}`
+        )
+          .then((response) => {
+            city.value = response.places[0]["place name"];
+            country.value = response.country;
+            const URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&finda=districts&lang=de_DE`;
+            this.sendHttpRequest("GET", URL).then((response) => {
+              creatingDistrictDropDown(district, response);
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("invalid Zip Code");
+            clearForm();
+          });
       }
-    
+    };
 
-    const onSelect_District = (domEvent)=> {
-      let selectedDistrict = domEvent.target[domEvent.target.selectedIndex].value; 
-      let pilouURL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${this.shadowRoot.getElementById("city").value }&plz_plz=${this.shadowRoot.getElementById("zip").value}&plz_city_clear=${this.shadowRoot.getElementById("city").value }&plz_district=${selectedDistrict}&finda=plz&plz_street=&lang=de_DE`;
-      
-      //Third api call to get the Streets
-      this.sendHttpRequest("POST", pilouURL).then((response)=>{
-        this.shadowRoot.getElementById("street").options.length = 0;
-          
-        if(response.rows){
-          for(let i =0; i<response.rows.length;i++){
-            this.shadowRoot.getElementById("street").add(new Option(response.rows[i].street))
-            }
-        }else{
-          this.shadowRoot.getElementById("street").add(new Option("No data Available"))
+    const onSelect_District = (domEvent) => {
+      let selectedDistrict =
+        domEvent.target[domEvent.target.selectedIndex].value;
+      let URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&plz_district=${selectedDistrict}&finda=streets&lang=de_DE`;
+      this.sendHttpRequest("GET", URL).then((response) => {
+        creatingStreetsDropDown(street, response);
+      });
+    };
+
+    const displayInfo = () => {
+      let values = [zip, city, district, street, houseNumber, country];
+      let keys = [
+        "zipCode",
+        "city",
+        "district",
+        "street",
+        "houseNumber",
+        "country",
+      ];
+      const info = {};
+      for (let i = 0; i < keys.length; i++) {
+        info[keys[i]] = values[i].value;
+      }
+      const e = document.createElement("div");
+      e.innerHTML = JSON.stringify(info);
+      this.shadowRoot.appendChild(e);
+      clearForm();
+    };
+
+    const clearForm = () => {
+      form.reset();
+      street.options.length = 0;
+      district.options.length = 0;
+      submit.disabled = true;
+    };
+
+    const creatingDistrictDropDown = (districtEl, obj) => {
+      districtEl.options.length = 0;
+      districtEl.add(new Option("--Choose a district--"));
+      for (let i = 0; i < obj.rows.length; i++) {
+        districtEl.add(new Option(obj.rows[i].district));
+      }
+    };
+
+    const creatingStreetsDropDown = (streetEl, obj) => {
+      streetEl.options.length = 0;
+      if (obj.rows) {
+        for (let i = 0; i < obj.rows.length; i++) {
+          street.add(new Option(obj.rows[i].street));
         }
-      })
-    }
+      } else {
+        streetEl.add(new Option("No data Available"));
+      }
+    };
 
+    const handleSumbitButton = () => {
+      const values = [
+        "zip",
+        "city",
+        "district",
+        "street",
+        "houseNumber",
+        "country",
+      ];
+      const newValues = values.map(
+        (element) => this.shadowRoot.getElementById(element).value
+      );
+      const emptyInput = (value) => value === "";
+      if (newValues.some(emptyInput)) {
+        submit.disabled = true;
+      } else {
+        submit.disabled = false;
+      }
+    };
 
-    this.shadowRoot.getElementById("zip").addEventListener("change", onTypingZipCode)
-    this.shadowRoot.getElementById("district").addEventListener("change",onSelect_District)
-    this.shadowRoot.getElementById("submit").addEventListener("click",()=>{console.log("salut")})
+    const zip = this.shadowRoot.getElementById("zip");
+    const city = this.shadowRoot.getElementById("city");
+    const district = this.shadowRoot.getElementById("district");
+    const street = this.shadowRoot.getElementById("street");
+    const houseNumber = this.shadowRoot.getElementById("houseNumber");
+    const country = this.shadowRoot.getElementById("country");
+    const form = this.shadowRoot.getElementById("form");
+    const submit = this.shadowRoot.getElementById("submit");
 
+    zip.addEventListener("change", onTypingZipCode, handleSumbitButton);
+    district.addEventListener("change", onSelect_District, handleSumbitButton);
+    submit.addEventListener("click", displayInfo);
+    country.addEventListener("change", handleSumbitButton);
+    houseNumber.addEventListener("change", handleSumbitButton);
   }
 }
 
 window.customElements.define("app-address", Address);
-
-
