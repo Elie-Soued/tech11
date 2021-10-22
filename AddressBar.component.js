@@ -2,86 +2,43 @@ const template = document.createElement("template");
 template.innerHTML = `
 
 <style>
-
-
-.smallSize{
-  width:20%;
+.smallSize {
+  width: 20%;
 }
-
-.mediumSize{
-    width:40%;
+.mediumSize {
+  width: 40%;
 }
-
-#country{
-    width:60%;
+#country {
+  width: 60%;
 }
-
 </style>
 
-    <form id="form">
-        <h3> Address </h3>
+<form id="form">
+<h3>Address</h3>
 
-        <div>
-            <label>ZIP</label>
-              <input
-               type="number"
-               id="zip"
-               name="zip"
-               />
-            
-            <label>City</label>
-              <input 
-                 type="text"
-                 class="smallSize"
-                 id="city"
-                 name="city"
-                 />
-               
-            
-            <label>District</label>
-            <select 
-              class="mediumSize"
-              id="district"
-              name="district">
-            </select>
-        </div>
+<div>
+  <label>ZIP</label>
+  <input type="number" id="zip" name="zip" />
+  <label>City</label>
+  <input type="text" class="smallSize" id="city" name="city" />
+  <label>District</label>
+  <select class="mediumSize" id="district" name="district"></select>
+</div>
 
-        <div>
-            <label>Street</label>
-            <select
-              class="mediumSize"
-              id="street"
-              name="street">
-             </select>
-            
-             <label>House Number</label>
-            <input
-              type="text"
-              id="houseNumber"
-              name="houseNumber"
-              
-              
-        
-            />
-        </div>
+<div>
+  <label>Street</label>
+  <select class="mediumSize" id="street" name="street"></select>
+  <label>House Number</label>
+  <input type="text" id="houseNumber" name="houseNumber" />
+</div>
 
-        <div>
-            <label>Country</label>
-            <input 
-             id="country"
-             name ="country"
-            
-             
-       />
-             
-        </div>
-     
-    </form>
-    <button   id="submit" disabled >Info</button>
-
-
-
-
+<div>
+  <label>Country</label>
+  <input id="country" name="country" />
+</div>
+</form>
+<button id="submit" disabled>Info</button>
+<button id="reset">Reset</button>
 `;
 
 class Address extends HTMLElement {
@@ -122,9 +79,14 @@ class Address extends HTMLElement {
             city.value = response.places[0]["place name"];
             country.value = response.country;
             const URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&finda=districts&lang=de_DE`;
-            this.sendHttpRequest("GET", URL).then((response) => {
-              creatingDistrictDropDown(district, response);
-            });
+            this.sendHttpRequest("GET", URL)
+              .then((response) => {
+                console.log(response);
+                creatingDistrictDropDown(district, response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           })
           .catch((error) => {
             console.log(error);
@@ -172,9 +134,13 @@ class Address extends HTMLElement {
 
     const creatingDistrictDropDown = (districtEl, obj) => {
       districtEl.options.length = 0;
-      districtEl.add(new Option("--Choose a district--"));
-      for (let i = 0; i < obj.rows.length; i++) {
-        districtEl.add(new Option(obj.rows[i].district));
+      if (obj.rows) {
+        districtEl.add(new Option("--Choose a district--"));
+        for (let i = 0; i < obj.rows.length; i++) {
+          districtEl.add(new Option(obj.rows[i].district));
+        }
+      } else {
+        districtEl.add(new Option("No data Available"));
       }
     };
 
@@ -217,12 +183,14 @@ class Address extends HTMLElement {
     const country = this.shadowRoot.getElementById("country");
     const form = this.shadowRoot.getElementById("form");
     const submit = this.shadowRoot.getElementById("submit");
+    const reset = this.shadowRoot.getElementById("reset");
 
     zip.addEventListener("change", onTypingZipCode, handleSumbitButton);
     district.addEventListener("change", onSelect_District, handleSumbitButton);
     submit.addEventListener("click", displayInfo);
     country.addEventListener("change", handleSumbitButton);
     houseNumber.addEventListener("change", handleSumbitButton);
+    reset.addEventListener("click", clearForm);
   }
 }
 
