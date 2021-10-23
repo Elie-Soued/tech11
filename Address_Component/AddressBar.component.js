@@ -14,8 +14,6 @@ template.innerHTML = `
 </style>
 
 <form id="form">
-<h3>Address</h3>
-
 <div>
   <label>ZIP</label>
   <input type="number" id="zip" name="zip" />
@@ -81,7 +79,6 @@ class Address extends HTMLElement {
             const URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&finda=districts&lang=de_DE`;
             this.sendHttpRequest("GET", URL)
               .then((response) => {
-                console.log(response);
                 creatingDistrictDropDown(district, response);
               })
               .catch((error) => {
@@ -148,12 +145,25 @@ class Address extends HTMLElement {
       streetEl.options.length = 0;
       if (obj.rows) {
         for (let i = 0; i < obj.rows.length; i++) {
-          street.add(new Option(obj.rows[i].street));
+          streetEl.add(new Option(obj.rows[i].street));
         }
       } else {
         streetEl.add(new Option("No data Available"));
       }
     };
+
+    // const creatingDropDown = (element, obj) => {
+    //   element.options.length = 0;
+    //   if (obj.rows) {
+    //     element.add(new Option("--Choose from list--"));
+    //     for (let i = 0; i < obj.rows.length; i++) {
+    //       element.add(new Option(obj.rows[i].district));
+    //     }
+    //   } else {
+    //     element.add(new Option("No data Available"));
+    //   }
+    //   return element;
+    // };
 
     const handleSumbitButton = () => {
       const values = [
