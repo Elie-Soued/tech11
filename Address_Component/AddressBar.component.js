@@ -64,6 +64,7 @@ class Address extends HTMLElement {
   }
 
   connectedCallback() {
+    //First 2 API Calls
     const onTypingZipCode = (e) => {
       if (e.target.value < 1067 || e.target.value > 99998) {
         alert("Zip code should be between 01067 and 99998");
@@ -79,7 +80,7 @@ class Address extends HTMLElement {
             const URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&finda=districts&lang=de_DE`;
             this.sendHttpRequest("GET", URL)
               .then((response) => {
-                creatingDistrictDropDown(district, response);
+                creatingDropDown(district, response, "district");
               })
               .catch((error) => {
                 console.log(error);
@@ -93,15 +94,17 @@ class Address extends HTMLElement {
       }
     };
 
+    //Third API Call
     const onSelect_District = (domEvent) => {
       let selectedDistrict =
         domEvent.target[domEvent.target.selectedIndex].value;
       let URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&plz_district=${selectedDistrict}&finda=streets&lang=de_DE`;
       this.sendHttpRequest("GET", URL).then((response) => {
-        creatingStreetsDropDown(street, response);
+        creatingDropDown(street, response, "street");
       });
     };
 
+    //Helper Functions
     const displayInfo = () => {
       let values = [zip, city, district, street, houseNumber, country];
       let keys = [
@@ -129,41 +132,18 @@ class Address extends HTMLElement {
       submit.disabled = true;
     };
 
-    const creatingDistrictDropDown = (districtEl, obj) => {
-      districtEl.options.length = 0;
+    const creatingDropDown = (element, obj, param) => {
+      element.options.length = 0;
       if (obj.rows) {
-        districtEl.add(new Option("--Choose a district--"));
+        element.add(new Option("--Choose from list--"));
         for (let i = 0; i < obj.rows.length; i++) {
-          districtEl.add(new Option(obj.rows[i].district));
+          element.add(new Option(obj.rows[i][param]));
         }
       } else {
-        districtEl.add(new Option("No data Available"));
+        element.add(new Option("No data Available"));
       }
+      return element;
     };
-
-    const creatingStreetsDropDown = (streetEl, obj) => {
-      streetEl.options.length = 0;
-      if (obj.rows) {
-        for (let i = 0; i < obj.rows.length; i++) {
-          streetEl.add(new Option(obj.rows[i].street));
-        }
-      } else {
-        streetEl.add(new Option("No data Available"));
-      }
-    };
-
-    // const creatingDropDown = (element, obj) => {
-    //   element.options.length = 0;
-    //   if (obj.rows) {
-    //     element.add(new Option("--Choose from list--"));
-    //     for (let i = 0; i < obj.rows.length; i++) {
-    //       element.add(new Option(obj.rows[i].district));
-    //     }
-    //   } else {
-    //     element.add(new Option("No data Available"));
-    //   }
-    //   return element;
-    // };
 
     const handleSumbitButton = () => {
       const values = [
@@ -185,6 +165,7 @@ class Address extends HTMLElement {
       }
     };
 
+    //Getting Elements by ID
     const zip = this.shadowRoot.getElementById("zip");
     const city = this.shadowRoot.getElementById("city");
     const district = this.shadowRoot.getElementById("district");
@@ -195,6 +176,7 @@ class Address extends HTMLElement {
     const submit = this.shadowRoot.getElementById("submit");
     const reset = this.shadowRoot.getElementById("reset");
 
+    //Settings Event Listeners
     zip.addEventListener("change", onTypingZipCode, handleSumbitButton);
     district.addEventListener("change", onSelect_District, handleSumbitButton);
     submit.addEventListener("click", displayInfo);
