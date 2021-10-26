@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Component Interaction</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="shortcut icon"
+      href="https://tech11.com/images/icons/favicon-32x32-1.png"
+      type="image/x-icon"
+    />
     <style>
       body {
         display: flex;
@@ -23,42 +28,18 @@
     <h3>Component Interaction</h3>
 
     <!--Valid date section-->
-    <div>
-      <label for="validDate"> Valid Date</label>
-      <input name="validDate" type="text" id="validDate" />
-    </div>
-
-    <br />
-
-    <p id="test"></p>
+    <app-date id="myValidDate"></app-date>
 
     <!--Type of Contract-->
-    <div>
-      <form>
-        <p>Please select the type of contract:</p>
-         
-        <input
-          type="radio"
-          id="Household"
-          name="contractType"
-          value="Household"
-        />
-          <label for="Household">Household</label><br />
+    <app-contract id="myContract"></app-contract>
 
-         
-        <input type="radio" id="Bicycle" name="contractType" value="Bicycle" />
-          <label for="Bicycle">Bicycle</label><br /> 
-      </form>
-    </div>
     <!--Text Area Section -->
+
     <div>
       <textarea rows="10" cols="30" id="textArea"></textarea>
     </div>
 
     <!--Debug / Rendered section -->
-
-    <p id="myParagraph"></p>
-
     <div id="debugContainer">
       <p>Debug</p>
       <div id="debug"></div>
@@ -69,5 +50,7 @@
     </a>
 
     <script src="./script.js" type="module"></script>
+    <script src="./components/date.component.js" type="module"></script>
+    <script src="./components/contract.component.js" type="module"></script>
   </body>
 </html>
