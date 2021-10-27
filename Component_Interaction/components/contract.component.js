@@ -28,7 +28,6 @@ customElements.define(
       };
 
       Bicycle.onchange = () => {
-        // can: this.onsend() or not recommended: eval(this.getAttribute('onsend'))
         this.dispatchEvent(
           new CustomEvent("bicycle", { detail: { message: Bicycle.value } })
         );
