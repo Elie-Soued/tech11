@@ -3,7 +3,7 @@ const template = document.createElement("template");
 template.innerHTML = `   
 <div>
 <form>
-  <p>Please select the type of contract:</p>
+  <h3>Please select the type of contract:</h3>
    
   <input
     type="radio"
