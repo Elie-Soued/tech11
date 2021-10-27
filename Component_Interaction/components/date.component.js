@@ -1,8 +1,8 @@
 const template = document.createElement("template");
 
 template.innerHTML = `<div>
-
-<input name="validDate" type="text" id="validDate" placeholder="Enter a valid date" />
+<label for="validDate">Choose a Date </label>
+<input name="validDate" type="date" id="validDate" placeholder="Enter a valid date" />
 </div>`;
 
 class ValidDate extends HTMLElement {
@@ -18,7 +18,6 @@ class ValidDate extends HTMLElement {
       this.dispatchEvent(
         new CustomEvent("send", { detail: { message: validDate.value } })
       );
-      validDate.value = "";
     };
   }
 }
