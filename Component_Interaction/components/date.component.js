@@ -1,8 +1,8 @@
 const template = document.createElement("template");
 
 template.innerHTML = `<div>
-<label for="validDate"> Valid Date</label>
-<input name="validDate" type="text" id="validDate" />
+
+<input name="validDate" type="text" id="validDate" placeholder="Enter a valid date" />
 </div>`;
 
 class ValidDate extends HTMLElement {
