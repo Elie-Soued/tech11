@@ -10,39 +10,35 @@
       href="https://tech11.com/images/icons/favicon-32x32-1.png"
       type="image/x-icon"
     />
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        height: 100vh;
-      }
 
-      textarea {
-        text-align: center;
-      }
-    </style>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <h3>Component Interaction</h3>
+    <h1>Component Interaction</h1>
 
-    <!--Valid date section-->
+    <!--Date Component-->
     <app-date id="myValidDate"></app-date>
 
-    <!--Type of Contract-->
+    <!--Contract Component-->
     <app-contract id="myContract"></app-contract>
 
-    <!--Text Area Section -->
-    <div>
-      <textarea rows="10" cols="30" id="textArea"></textarea>
+    <!--Text area element-->
+    <textarea rows="10" cols="30" id="textArea"></textarea>
+
+    <!--Initial Data-->
+    <div id="initialData"></div>
+
+    <!--Updated contract-->
+    <h3 id="contractTitle">Contract Information</h3>
+    <div id="dateContainer">
+      <h4>Date</h4>
+      <p id="renderedDate"></p>
+    </div>
+    <div id="contract">
+      <p id="renderedContract"></p>
     </div>
 
-    <!--Debug / Rendered section -->
-    <p>Debug</p>
-    <div id="debug"></div>
-
-    <!--back button-->
+    <!--Back Button-->
     <a href="/index.html">
       <button>Go to the addressComponent</button>
     </a>
