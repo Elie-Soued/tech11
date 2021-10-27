@@ -1,0 +1,41 @@
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
+}
+
+textarea {
+  text-align: center;
+}
+
+#contract {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+
+  padding-top: 0;
+  margin-top: -3rem;
+}
+
+#renderedContract {
+  width: 50%;
+  text-align: center;
+}
+
+#renderedDate {
+  text-align: center;
+}
+
+#dateContainer {
+  display: none;
+  width: 100%;
+  text-align: center;
+  display: none;
+}
+
+#contractTitle {
+  display: none;
+}
