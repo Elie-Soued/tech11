@@ -1,19 +1,26 @@
-customElements.define(
-  "app-date",
-  class extends HTMLElement {
-    connectedCallback() {
-      this.innerHTML = `<div>
-      <label for="validDate"> Valid Date</label>
-      <input name="validDate" type="text" id="validDate" />
-    </div>`;
+const template = document.createElement("template");
 
-      validDate.onchange = () => {
-        // can: this.onsend() or not recommended: eval(this.getAttribute('onsend'))
-        this.dispatchEvent(
-          new CustomEvent("send", { detail: { message: validDate.value } })
-        );
-        validDate.value = "";
-      };
-    }
+template.innerHTML = `<div>
+<label for="validDate"> Valid Date</label>
+<input name="validDate" type="text" id="validDate" />
+</div>`;
+
+class ValidDate extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
-);
+
+  connectedCallback() {
+    const validDate = this.shadowRoot.getElementById("validDate");
+    validDate.onchange = () => {
+      this.dispatchEvent(
+        new CustomEvent("send", { detail: { message: validDate.value } })
+      );
+      validDate.value = "";
+    };
+  }
+}
+
+customElements.define("app-date", ValidDate);
