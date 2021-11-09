@@ -16,7 +16,7 @@ template.innerHTML = `
 <form id="form">
 <div>
   <label>ZIP</label>
-  <input type="number" id="zip" name="zip" />
+  <input type="number" id="zip" name="zip" placeholder= "value 01067 : 99998" />
   <label>City</label>
   <input type="text" class="smallSize" id="city" name="city" />
   <label>District</label>
@@ -42,6 +42,7 @@ template.innerHTML = `
 class Address extends HTMLElement {
   constructor() {
     super();
+    //This allows to attach the shadowdom to our Component
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
