@@ -6,11 +6,7 @@ class Address extends Parent {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    
-    // let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,this.form, this.submit,this.reset];
-    // let keys = ["zip", "city", "district","street","houseNumber","country","form","submit","reset"];
-    // this.createProperties(values,keys,this.shadowRoot)
-    
+       
     this.zip = this.shadowRoot.getElementById("zip");
     this.city = this.shadowRoot.getElementById("city");
     this.district = this.shadowRoot.getElementById("district");
