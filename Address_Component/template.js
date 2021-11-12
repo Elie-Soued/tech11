@@ -16,7 +16,7 @@ template.innerHTML = `
 <form id="form">
 <div>
   <label>ZIP</label>
-  <input type="number" id="zip" name="zip" placeholder= "value 01067 : 99998" />
+  <input type="number" id="zip" name="zip" />
   <label>City</label>
   <input type="text" class="smallSize" id="city" name="city" />
   <label>District</label>
