@@ -114,14 +114,6 @@ class Address extends HTMLElement {
     }
   };
 
-  createProperties(valuesArr, keyArr, shadowRoot) {
-    for (let i = 0; i < valuesArr.length; i++) {
-      valuesArr[i] = shadowRoot.getElementById(keyArr[i]);
-    }
-  }
-
-
-
   connectedCallback() {
 
     const onTypingZipCode = (e) => {
