@@ -75,17 +75,8 @@ class Address extends HTMLElement {
   };
 
   handleSumbitButton(submit) {
-    const values = [
-      "zip",
-      "city",
-      "district",
-      "street",
-      "houseNumber",
-      "country",
-    ];
-    const newValues = values.map(
-      (element) => this.shadowRoot.getElementById(element).value
-    );
+    const values = ["zip","city","district","street","houseNumber","country"];
+    const newValues = values.map((element) => this.shadowRoot.getElementById(element).value);
     const emptyInput = (value) => value === "";
     if (newValues.some(emptyInput)) {
       submit.disabled = true;
