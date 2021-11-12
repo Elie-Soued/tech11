@@ -4,7 +4,7 @@ const myContract = document.getElementById("myContract");
 const textArea = document.getElementById("textArea");
 
 //Setting Event Listeners
-myContract.addEventListener("household", (e) => {
+myContract.addEventListener("household", () => {
   textArea.innerHTML = "The flat of the policy holder is 100 square meters";
   delete data.contract.contractModules.BICYCLE;
   if (!data.contract.contractModules.HOUSEHOLD) {
@@ -17,7 +17,7 @@ myContract.addEventListener("household", (e) => {
   debug.innerText = JSON.stringify(data);
 });
 
-myContract.addEventListener("bicycle", (e) => {
+myContract.addEventListener("bicycle", () => {
   textArea.innerHTML =
     "The policyholder is happy to insure his new E-Bike also within the contract";
   delete data.contract.contractModules.HOUSEHOLD;
