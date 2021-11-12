@@ -16,23 +16,49 @@ template.innerHTML = `
 <form id="form">
 <div>
   <label>ZIP</label>
-  <input type="number" id="zip" name="zip" />
+  <input 
+   type="number"
+   id="zip"
+   name="zip"
+   required />
+
   <label>City</label>
-  <input type="text" class="smallSize" id="city" name="city" />
-  <label>District</label>
-  <select class="mediumSize" id="district" name="district"></select>
+  <input type="text"
+   class="smallSize"
+   id="city"
+   name="city"
+   required />
+  
+   <label>District</label>
+  <select 
+   class="mediumSize"
+    id="district"
+    name="district"
+    required></select>
 </div>
 
 <div>
   <label>Street</label>
-  <select class="mediumSize" id="street" name="street"></select>
+  <select
+   class="mediumSize"
+   id="street"
+   name="street"
+   required></select>
   <label>House Number</label>
-  <input type="text" id="houseNumber" name="houseNumber" />
+  
+  <input 
+  type="text"
+   id="houseNumber"
+   name="houseNumber"
+   required />
 </div>
 
 <div>
   <label>Country</label>
-  <input id="country" name="country" />
+  <input
+   id="country"
+    name="country"
+    required />
 </div>
 </form>
 <button id="submit" disabled>Info</button>
