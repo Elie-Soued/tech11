@@ -6,9 +6,12 @@ class Address extends HTMLElement {
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     let keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
-    keys.forEach((key) => (this[key] = this.shadowRoot.getElementById(key)));
-
+    keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
+    let toCheck = [...keys]
+    toCheck.splice(toCheck.length-3).forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});})
   }
+
+
 
   sendHttpRequest(method, url) {
     const promise = new Promise((resolve, reject) => {
@@ -68,9 +71,7 @@ class Address extends HTMLElement {
 
   handleSumbitButton(submit) {
     const values = ["zip","city","district","street","houseNumber","country"];
-    const newValues = values.map(
-      (element) => this.shadowRoot.getElementById(element).value
-    );
+    const newValues = values.map((element) => this.shadowRoot.getElementById(element).value);
     const emptyInput = (value) => value === "";
     if (newValues.some(emptyInput)) {
       submit.disabled = true;
@@ -130,13 +131,12 @@ class Address extends HTMLElement {
     };
 
     //Settings Event Listeners
-    this.zip.addEventListener("change", onTypingZipCode, handleSumbitButton);
+    this.zip.addEventListener("change", onTypingZipCode, );
     this.district.addEventListener("change",onSelect_District, handleSumbitButton);
     this.submit.addEventListener("click", displayInfo);
-    this.country.addEventListener("change", handleSumbitButton);
-    this.houseNumber.addEventListener("change", handleSumbitButton);
     this.reset.addEventListener("click", clearForm);
   }
+
 }
 
 window.customElements.define("app-address", Address);
