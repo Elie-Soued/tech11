@@ -5,22 +5,9 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+    let keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
+    keys.forEach((key) => (this[key] = this.shadowRoot.getElementById(key)));
 
-    // let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,this.form, this.submit,this.reset];
-    // let keys = ["zipCode","city","district","street","houseNumber","country","form","submit","reset"];
-    // for(let i =0; i<values.length; i++){
-    // values[i] = this.shadowRoot.getElementById(keys[i])
-    // }
-
-    this.zip = this.shadowRoot.getElementById("zip");
-    this.city = this.shadowRoot.getElementById("city");
-    this.district = this.shadowRoot.getElementById("district");
-    this.street = this.shadowRoot.getElementById("street");
-    this.houseNumber = this.shadowRoot.getElementById("houseNumber");
-    this.country = this.shadowRoot.getElementById("country");
-    this.form = this.shadowRoot.getElementById("form");
-    this.submit = this.shadowRoot.getElementById("submit");
-    this.reset = this.shadowRoot.getElementById("reset");
   }
 
   sendHttpRequest(method, url) {
@@ -80,7 +67,7 @@ class Address extends HTMLElement {
   };
 
   handleSumbitButton(submit) {
-    const values = ["zip","city","district","street","houseNumber","country",];
+    const values = ["zip","city","district","street","houseNumber","country"];
     const newValues = values.map(
       (element) => this.shadowRoot.getElementById(element).value
     );
@@ -97,10 +84,8 @@ class Address extends HTMLElement {
       alert("Zip code should be between 01067 and 99998");
       this.clearForm(this.form, this.street, this.district, this.submit);
     } else {
-      this.sendHttpRequest(
-        "GET",
-        `http://api.zippopotam.us/DE/${e.target.value}`
-      )
+  
+      this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
         .then((response) => {
           city.value = response.places[0]["place name"];
           country.value = response.country;
@@ -132,7 +117,7 @@ class Address extends HTMLElement {
 
     const displayInfo = () => {
       let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,];
-      let keys = ["zipCode","city","district","street","houseNumber","country"];
+      let keys = ["zip","city","district","street","houseNumber","country"];
       this.displayInfo(values, keys, this.shadowRoot, clearForm);
     };
 
@@ -146,7 +131,7 @@ class Address extends HTMLElement {
 
     //Settings Event Listeners
     this.zip.addEventListener("change", onTypingZipCode, handleSumbitButton);
-    this.district.addEventListener("change",onSelect_District,handleSumbitButton);
+    this.district.addEventListener("change",onSelect_District, handleSumbitButton);
     this.submit.addEventListener("click", displayInfo);
     this.country.addEventListener("change", handleSumbitButton);
     this.houseNumber.addEventListener("change", handleSumbitButton);
