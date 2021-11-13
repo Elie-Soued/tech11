@@ -5,7 +5,13 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-       
+
+    // let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,this.form, this.submit,this.reset];
+    // let keys = ["zipCode","city","district","street","houseNumber","country","form","submit","reset"];
+    // for(let i =0; i<values.length; i++){
+    // values[i] = this.shadowRoot.getElementById(keys[i])
+    // }
+
     this.zip = this.shadowRoot.getElementById("zip");
     this.city = this.shadowRoot.getElementById("city");
     this.district = this.shadowRoot.getElementById("district");
@@ -16,7 +22,6 @@ class Address extends HTMLElement {
     this.submit = this.shadowRoot.getElementById("submit");
     this.reset = this.shadowRoot.getElementById("reset");
   }
-
 
   sendHttpRequest(method, url) {
     const promise = new Promise((resolve, reject) => {
@@ -75,8 +80,10 @@ class Address extends HTMLElement {
   };
 
   handleSumbitButton(submit) {
-    const values = ["zip","city","district","street","houseNumber","country"];
-    const newValues = values.map((element) => this.shadowRoot.getElementById(element).value);
+    const values = ["zip","city","district","street","houseNumber","country",];
+    const newValues = values.map(
+      (element) => this.shadowRoot.getElementById(element).value
+    );
     const emptyInput = (value) => value === "";
     if (newValues.some(emptyInput)) {
       submit.disabled = true;
@@ -88,7 +95,7 @@ class Address extends HTMLElement {
   onTypingZipCode = (e, city, country, district) => {
     if (e.target.value < 1067 || e.target.value > 99998) {
       alert("Zip code should be between 01067 and 99998");
-      this.clearForm();
+      this.clearForm(this.form, this.street, this.district, this.submit);
     } else {
       this.sendHttpRequest(
         "GET",
@@ -115,17 +122,16 @@ class Address extends HTMLElement {
   };
 
   connectedCallback() {
-
     const onTypingZipCode = (e) => {
-      this.onTypingZipCode(e,this.city,this.country,this.district)
+      this.onTypingZipCode(e, this.city, this.country, this.district);
     };
 
     const onSelect_District = (domEvent) => {
-      this.onSelect_District(domEvent,this.city,this.street)
+      this.onSelect_District(domEvent, this.city, this.street);
     };
 
     const displayInfo = () => {
-      let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country];
+      let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,];
       let keys = ["zipCode","city","district","street","houseNumber","country"];
       this.displayInfo(values, keys, this.shadowRoot, clearForm);
     };
@@ -135,7 +141,7 @@ class Address extends HTMLElement {
     };
 
     const handleSumbitButton = () => {
-      this.handleSumbitButton(this.submit)
+      this.handleSumbitButton(this.submit);
     };
 
     //Settings Event Listeners
