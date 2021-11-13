@@ -126,13 +126,11 @@ class Address extends HTMLElement {
       this.clearForm(this.form, this.street, this.district, this.submit);
     };
 
-    const handleSumbitButton = () => {
-      this.handleSumbitButton(this.submit);
-    };
+ 
 
     //Settings Event Listeners
     this.zip.addEventListener("change", onTypingZipCode, );
-    this.district.addEventListener("change",onSelect_District, handleSumbitButton);
+    this.district.addEventListener("change",onSelect_District);
     this.submit.addEventListener("click", displayInfo);
     this.reset.addEventListener("click", clearForm);
   }
