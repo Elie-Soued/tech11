@@ -1,0 +1,4 @@
+1- handleSubmit
+2- When I get an error I can not start a new search
+3- Write the constructor in a cleaner way
+
