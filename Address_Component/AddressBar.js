@@ -7,12 +7,17 @@ class Address extends HTMLElement {
     this.shadowRoot.appendChild(template.content.cloneNode(true));
     const keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
     keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
-    const toCheck = [...keys]
-    toCheck.splice(toCheck.length-3)
-    toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});})
+    this.toCheck = [...keys]
+    this.toCheckProperties = [];
+    this.toCheck.splice(this.toCheck.length-3)
+    this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
+    this.toCheckProperties.push(this[element])})
+    this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
+    this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
+    this.submit.addEventListener("click", ()=>{ this.displayInfo(this.toCheckProperties, this.toCheck, this.shadowRoot);});
+    this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
+
   }
-
-
 
   sendHttpRequest(method, url) {
     const promise = new Promise((resolve, reject) => {
@@ -108,24 +113,5 @@ class Address extends HTMLElement {
     }
   };
 
-  connectedCallback() {
-
-    const displayInfo = () => {
-      let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,];
-      let keys = ["zip","city","district","street","houseNumber","country"];
-      this.displayInfo(values, keys, this.shadowRoot);
-    };
-
-
- 
-
-    //Settings Event Listeners
-    this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
-    this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
-    this.submit.addEventListener("click", displayInfo);
-    this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
-  }
-
 }
-
 window.customElements.define("app-address", Address);
