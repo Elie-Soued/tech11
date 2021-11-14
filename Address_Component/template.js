@@ -16,16 +16,26 @@ template.innerHTML = `
 }
 
 
-#errorMessage{
+#pinOffRange{
   color:red;
   opacity:0%;
+}
+
+#invalidPin{
+  color:red;
+  opacity:0%;
+}
+
+#zip{
+  border:1px solid black;
 }
 
 
 </style>
 
 <form id="form">
-<p id="errorMessage">Zip code should be between 01067 and 99998</p>
+<p id="pinOffRange">Zip code should be between 01067 and 99998</p>
+<p id="invalidPin">Zip code is invalid</p>
 <div>
   <label>ZIP</label>
   <input 
