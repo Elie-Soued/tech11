@@ -5,7 +5,7 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "errorMessage"];
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin"];
     this.createAllProperties();
     this.executeEventListeners();
   }
@@ -47,6 +47,7 @@ class Address extends HTMLElement {
     submit.disabled = true;
   }
 
+  
   displayInfo = (valuesArr, keysArr, shadowRoot) => {
     const info = {};
     for (let i = 0; i < keysArr.length; i++) {
@@ -58,6 +59,7 @@ class Address extends HTMLElement {
     this.clearForm(this.form, this.street, this.district, this.submit);
   };
 
+  
   onSelect_District = (domEvent, city, street) => {
     let selectedDistrict = domEvent.target[domEvent.target.selectedIndex].value;
     let URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&plz_district=${selectedDistrict}&finda=streets&lang=de_DE`;
@@ -66,25 +68,24 @@ class Address extends HTMLElement {
     });
   };
 
+  
   handleSumbitButton(submit) {
-    const values = ["zip","city","district","street","houseNumber","country"];
-    const newValues = values.map((element) => this.shadowRoot.getElementById(element).value);
+    const formPropertyName = ["zip","city","district","street","houseNumber","country"];
+    const formPropertiesValues = formPropertyName .map((property) => this.shadowRoot.getElementById(property).value);
     const emptyInput = (value) => value === "";
-    if (newValues.some(emptyInput)) {
-      submit.disabled = true;
-    } else {
-      submit.disabled = false;
-    }
+    formPropertiesValues.some(emptyInput)?submit.disabled = true : submit.disabled = false;  
   }
+
 
   onTypingZipCode = (e, city, country, district) => {
     if (e.target.value < 1067 || e.target.value > 99998) {
-      this.errorMessage.style.opacity = "100%";
+      this.pinOffRange.style.opacity = "100%";
+      this.invalidPin.style.opacity = "0%";
       this.clearForm(this.form, this.street, this.district, this.submit);
       this.zip.focus()
     } else {
-
-      this.errorMessage.style.opacity = "0%";
+      this.invalidPin.style.opacity = "0%";
+      this.pinOffRange.style.opacity = "0%";
       this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
         .then((response) => {
           city.value = response.places[0]["place name"];
@@ -100,14 +101,14 @@ class Address extends HTMLElement {
         })
         .catch((error) => {
           console.log(error);
-          alert("invalid Zip Code");
+          this.invalidPin.style.opacity = "100%";
           this.clearForm(this.form, this.street, this.district, this.submit);
+          this.zip.focus()
         });
     }
   };
 
  
-
   createAllProperties(){
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
     this.addEventListenerToSelectedProperties();
@@ -115,30 +116,26 @@ class Address extends HTMLElement {
 
 
   selectPropertiesToBeChecked(){
-    //Could be replaced with form properties
-    //The goal here is to get an array holding all the form properties
-    //1- Create a new Array holding all the propertie names values
-    //2- Create an empty array called toCheckProperties
-    //3- Create an empty array called toCheckPropertiesValues
-    //4- Remove the last 4 element of this.keys
     this.toCheck = [...this.keys]
     this.toCheckProperties = [];
     this.toCheck.splice(this.toCheck.length-4);
   }
 
-addEventListenerToSelectedProperties(){
-  this.selectPropertiesToBeChecked();
-  this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
-  this.toCheckProperties.push(this[element])});
-}
-
-executeEventListeners(){
-  this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
-  this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
-  this.submit.addEventListener("click", ()=>{ this.displayInfo(this.toCheckProperties, this.toCheck, this.shadowRoot);});
-  this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
-}
+  
+  addEventListenerToSelectedProperties(){
+    this.selectPropertiesToBeChecked();
+    this.toCheck.forEach((element)=>{
+      this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
+      this.toCheckProperties.push(this[element])});
+  }
 
 
+  executeEventListeners(){
+    this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
+    this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
+    this.submit.addEventListener("click", ()=>{ this.displayInfo(this.toCheckProperties, this.toCheck, this.shadowRoot);});
+    this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
+  }
 }
+
 window.customElements.define("app-address", Address);
