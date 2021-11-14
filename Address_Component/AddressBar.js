@@ -11,7 +11,7 @@ class Address extends HTMLElement {
   }
 
   createAllProperties(){
-    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin"];
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin","noData"];
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
     this.addEventListenerToFormProperties();
   }
@@ -61,7 +61,9 @@ class Address extends HTMLElement {
         element.add(new Option(obj.rows[i][param]));
       }
     } else {
-      element.add(new Option("No data Available"));
+      this.clearForm(this.form, this.street, this.district, this.submit);
+      this.noData.style.opacity = "100%";
+      this.zip.focus();
     }
     return element;
   }
@@ -103,9 +105,17 @@ class Address extends HTMLElement {
 
   handleOffRangePin(){
     this.pinOffRange.style.opacity = "100%";
+    this.noData.style.opacity = "0%";
     this.invalidPin.style.opacity = "0%";
     this.clearForm(this.form, this.street, this.district, this.submit);
     this.zip.focus()
+  }
+
+  removeErrorAlerts(){
+    this.invalidPin.style.opacity = "0%";
+    this.pinOffRange.style.opacity = "0%";
+    this.noData.style.opacity = "0%";
+
   }
 
   
@@ -113,8 +123,7 @@ class Address extends HTMLElement {
     if (e.target.value < 1067 || e.target.value > 99998) {
         this.handleOffRangePin()
     } else {
-      this.invalidPin.style.opacity = "0%";
-      this.pinOffRange.style.opacity = "0%";
+      this.removeErrorAlerts()
       this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
         .then((response) => {
           city.value = response.places[0]["place name"];
