@@ -5,10 +5,11 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    let keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
+    const keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
     keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
-    let toCheck = [...keys]
-    toCheck.splice(toCheck.length-3).forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});})
+    const toCheck = [...keys]
+    toCheck.splice(toCheck.length-3)
+    toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});})
   }
 
 
@@ -58,7 +59,7 @@ class Address extends HTMLElement {
     const e = document.createElement("div");
     e.innerHTML = JSON.stringify(info);
     shadowRoot.appendChild(e);
-    clearFunction();
+    this.clearForm(this.form, this.street, this.district, this.submit);
   };
 
   onSelect_District = (domEvent, city, street) => {
@@ -102,37 +103,27 @@ class Address extends HTMLElement {
         .catch((error) => {
           console.log(error);
           alert("invalid Zip Code");
-          this.clearForm();
+          this.clearForm(this.form, this.street, this.district, this.submit);
         });
     }
   };
 
   connectedCallback() {
-    const onTypingZipCode = (e) => {
-      this.onTypingZipCode(e, this.city, this.country, this.district);
-    };
-
-    const onSelect_District = (domEvent) => {
-      this.onSelect_District(domEvent, this.city, this.street);
-    };
 
     const displayInfo = () => {
       let values = [this.zip,this.city,this.district,this.street,this.houseNumber,this.country,];
       let keys = ["zip","city","district","street","houseNumber","country"];
-      this.displayInfo(values, keys, this.shadowRoot, clearForm);
+      this.displayInfo(values, keys, this.shadowRoot);
     };
 
-    const clearForm = () => {
-      this.clearForm(this.form, this.street, this.district, this.submit);
-    };
 
  
 
     //Settings Event Listeners
-    this.zip.addEventListener("change", onTypingZipCode, );
-    this.district.addEventListener("change",onSelect_District);
+    this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
+    this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
     this.submit.addEventListener("click", displayInfo);
-    this.reset.addEventListener("click", clearForm);
+    this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
   }
 
 }
