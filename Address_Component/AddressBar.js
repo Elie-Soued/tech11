@@ -124,6 +124,5 @@ class Address extends HTMLElement {
     this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
     this.toCheckProperties.push(this[element])})
   }
-
 }
 window.customElements.define("app-address", Address);
