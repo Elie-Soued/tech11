@@ -26,14 +26,15 @@ template.innerHTML = `
   opacity:0%;
 }
 
-#zip{
-  border:1px solid black;
+#noData{
+  color:red;
+  opacity:0%;
 }
-
 
 </style>
 
 <form id="form">
+<p id="noData">Data not available</p>
 <p id="pinOffRange">Zip code should be between 01067 and 99998</p>
 <p id="invalidPin">Zip code is invalid</p>
 <div>
