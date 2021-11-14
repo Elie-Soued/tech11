@@ -5,7 +5,8 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.findANameLater();
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
+    this.createAllProperties();
     this.executeEventListeners();
   }
 
@@ -110,11 +111,14 @@ class Address extends HTMLElement {
     this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
   }
 
+  createAllProperties(){
+    this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
+    this.createPropertiesToBeChecked()
+  }
 
-  findANameLater(){
-    const keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
-    keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
-    this.toCheck = [...keys]
+
+  createPropertiesToBeChecked(){
+    this.toCheck = [...this.keys]
     this.toCheckProperties = [];
     this.toCheck.splice(this.toCheck.length-3)
     this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
