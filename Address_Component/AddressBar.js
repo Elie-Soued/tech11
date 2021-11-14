@@ -5,7 +5,7 @@ class Address extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset"];
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "errorMessage"];
     this.createAllProperties();
     this.executeEventListeners();
   }
@@ -79,10 +79,12 @@ class Address extends HTMLElement {
 
   onTypingZipCode = (e, city, country, district) => {
     if (e.target.value < 1067 || e.target.value > 99998) {
-      alert("Zip code should be between 01067 and 99998");
+      this.errorMessage.style.opacity = "100%";
       this.clearForm(this.form, this.street, this.district, this.submit);
+      this.zip.focus()
     } else {
-  
+
+      this.errorMessage.style.opacity = "0%";
       this.sendHttpRequest("GET",`http://api.zippopotam.us/DE/${e.target.value}`)
         .then((response) => {
           city.value = response.places[0]["place name"];
@@ -111,10 +113,17 @@ class Address extends HTMLElement {
     this.addEventListenerToSelectedProperties();
   }
 
+
   selectPropertiesToBeChecked(){
+    //Could be replaced with form properties
+    //The goal here is to get an array holding all the form properties
+    //1- Create a new Array holding all the propertie names values
+    //2- Create an empty array called toCheckProperties
+    //3- Create an empty array called toCheckPropertiesValues
+    //4- Remove the last 4 element of this.keys
     this.toCheck = [...this.keys]
     this.toCheckProperties = [];
-    this.toCheck.splice(this.toCheck.length-3);
+    this.toCheck.splice(this.toCheck.length-4);
   }
 
 addEventListenerToSelectedProperties(){

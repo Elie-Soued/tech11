@@ -2,18 +2,30 @@ const template = document.createElement("template");
 template.innerHTML = `
 
 <style>
+
 .smallSize {
   width: 20%;
 }
+
 .mediumSize {
   width: 40%;
 }
+
 #country {
   width: 60%;
 }
+
+
+#errorMessage{
+  color:red;
+  opacity:0%;
+}
+
+
 </style>
 
 <form id="form">
+<p id="errorMessage">Zip code should be between 01067 and 99998</p>
 <div>
   <label>ZIP</label>
   <input 
@@ -21,6 +33,8 @@ template.innerHTML = `
    id="zip"
    name="zip"
    required />
+
+  
 
   <label>City</label>
   <input type="text"
