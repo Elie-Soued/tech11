@@ -104,25 +104,32 @@ class Address extends HTMLElement {
     }
   };
 
-  executeEventListeners(){
-    this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
-    this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
-    this.submit.addEventListener("click", ()=>{ this.displayInfo(this.toCheckProperties, this.toCheck, this.shadowRoot);});
-    this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
-  }
+ 
 
   createAllProperties(){
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
-    this.createPropertiesToBeChecked()
+    this.addEventListenerToSelectedProperties();
   }
 
-
-  createPropertiesToBeChecked(){
+  selectPropertiesToBeChecked(){
     this.toCheck = [...this.keys]
     this.toCheckProperties = [];
-    this.toCheck.splice(this.toCheck.length-3)
-    this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
-    this.toCheckProperties.push(this[element])})
+    this.toCheck.splice(this.toCheck.length-3);
   }
+
+addEventListenerToSelectedProperties(){
+  this.selectPropertiesToBeChecked();
+  this.toCheck.forEach((element)=>{this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
+  this.toCheckProperties.push(this[element])});
+}
+
+executeEventListeners(){
+  this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
+  this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
+  this.submit.addEventListener("click", ()=>{ this.displayInfo(this.toCheckProperties, this.toCheck, this.shadowRoot);});
+  this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
+}
+
+
 }
 window.customElements.define("app-address", Address);
