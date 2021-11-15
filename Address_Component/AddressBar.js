@@ -10,11 +10,13 @@ class Address extends HTMLElement {
     this.addAllEventListeners();
   }
 
+
   createAllProperties(){
     this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin","noData"];
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
     this.addEventListenerToFormProperties();
   }
+
 
   selectFormProperties(){
     this.formValueNames  = [...this.keys]
@@ -22,12 +24,14 @@ class Address extends HTMLElement {
     this.formValueNames .splice(this.formValueNames.length-4);
   }
 
+
   addEventListenerToFormProperties(){
     this.selectFormProperties();
     this.formValueNames.forEach((element)=>{
       this[element].addEventListener("change", ()=>{this.handleSumbitButton(this.submit)});
       this.formValueProperties .push(this[element])});
   }
+
  
   addAllEventListeners(){
     this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
@@ -35,6 +39,7 @@ class Address extends HTMLElement {
     this.submit.addEventListener("click", ()=>{ this.displayInfo(this.formValueProperties, this.formValueNames, this.shadowRoot);});
     this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
   }
+
 
   sendHttpRequest(method, url) {
     const promise = new Promise((resolve, reject) => {
@@ -53,6 +58,7 @@ class Address extends HTMLElement {
     return promise;
   }
 
+
   creatingDropDown(element, obj, param) {
     element.options.length = 0;
     if (obj.rows) {
@@ -68,12 +74,14 @@ class Address extends HTMLElement {
     return element;
   }
 
+
   clearForm(form, street, district, submit) {
     form.reset();
     street.options.length = 0;
     district.options.length = 0;
     submit.disabled = true;
   }
+
 
   displayInfo = (valuesArr, keysArr, shadowRoot) => {
     const info = {};
@@ -86,6 +94,7 @@ class Address extends HTMLElement {
     this.clearForm(this.form, this.street, this.district, this.submit);
   };
   
+
   onSelect_District = (domEvent, city, street) => {
     let selectedDistrict = domEvent.target[domEvent.target.selectedIndex].value;
     let URL = `https://cors-anywhere.herokuapp.com/https://www.postdirekt.de/plzserver/PlzAjaxServlet?plz_city=${city.value}&plz_city_clear=${city.value}&plz_district=${selectedDistrict}&finda=streets&lang=de_DE`;
@@ -111,11 +120,11 @@ class Address extends HTMLElement {
     this.zip.focus()
   }
 
+
   removeErrorAlerts(){
     this.invalidPin.style.opacity = "0%";
     this.pinOffRange.style.opacity = "0%";
     this.noData.style.opacity = "0%";
-
   }
 
   
@@ -146,4 +155,5 @@ class Address extends HTMLElement {
     }
   };
 }
+
 window.customElements.define("app-address", Address);
