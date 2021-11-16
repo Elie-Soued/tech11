@@ -1,23 +1,21 @@
 const template = document.createElement("template");
 
-template.innerHTML = `   
-<div>
-<form>
-  <h3>Please select the type of contract:</h3>
-   
-  <input
-    type="radio"
-    id="Household"
-    name="contractType"
-    value="Household"
-  />
-    <label for="Household">Household</label><br />
+template.innerHTML = ` 
 
-   
-  <input type="radio" id="Bicycle" name="contractType" value="Bicycle" />
-    <label for="Bicycle">Bicycle</label><br /> 
-</form>
-</div>`;
+<main>
+  <form>
+    <input
+      type="radio"
+      id="Household"
+      name="contractType"
+      value="Household"
+      />
+    <label for="Household">Household</label>
+    <br />
+    <input type="radio" id="Bicycle" name="contractType" value="Bicycle" />
+      <label for="Bicycle">Bicycle</label><br /> 
+  </form>
+</main>`;
 
 class Contract extends HTMLElement {
   constructor() {

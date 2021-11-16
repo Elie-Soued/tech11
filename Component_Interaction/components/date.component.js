@@ -1,7 +1,7 @@
 const template = document.createElement("template");
 
-template.innerHTML = `<div>
-<label for="validDate">Choose a Date </label>
+template.innerHTML = `
+<div>
 <input name="validDate" type="date" id="validDate" placeholder="Enter a valid date" />
 </div>`;
 
