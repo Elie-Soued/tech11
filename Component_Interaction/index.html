@@ -10,66 +10,27 @@
       href="https://tech11.com/images/icons/favicon-32x32-1.png"
       type="image/x-icon"
     />
-
     <link rel="stylesheet" href="./style.css" />
   </head>
+
   <body>
     <h1>Component Interaction</h1>
-
-   
-   <main>
-    <section>
-      <!--Date Component-->
-      <app-date id="myValidDate"></app-date>
-      <!--Contract Component-->
-      <app-contract id="myContract"></app-contract>
-      <!--Text area element-->
-      <textarea rows="10" cols="30" id="textArea"></textarea>
-    </section>
-
-    <section>
-      <!--Initial Data-->
-      <div id="initialData">
-
-        <h3 id="introTitle">Bicycle or Household?</h3>
-        <p>
-          If you are looking to make a Bicycle or Household contract, do not look any further.
-          Use the form on the left to build the contract you need.<br>
-          You could choose the date and the type of contract (Bicycle or Household contract)<br>
-          Enjoy! 
-        </p>
-        <div id="imageHolder">
-          <img src="https://cdn.shopify.com/s/files/1/0773/9113/products/RoeblingProfile_1600x.jpg?v=1629750752" alt="bicycle">
-          <img src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="house">
-        </div>
-
-
-      </div>
-      <!--Updated contract-->
-      <h3 id="contractTitle">Contract Information</h3>
-
-      <div id="dateContainer">
-        <h4>Date</h4>
-      <p id="renderedDate"></p>
-      <br>
-      </div>
-      <div id="contract">
-        <p id="renderedContract"></p>
-      </div>
-    </section>
-  </main>
-
-
-
- 
-
-    <!--Back Button-->
+    <main>
+      <section>
+        <app-date-selector id="myValidDate"></app-date-selector>
+        <app-contract id="myContract"></app-contract>
+        <textarea rows="10" cols="30" id="textArea"></textarea>
+      </section>
+      <section>
+        <app-result></app-result>
+      </section>
+    </main>
     <a href="/index.html">
       <button>Go to the addressComponent</button>
     </a>
 
-    <script src="./script.js" type="module"></script>
-    <script src="./components/date.component.js" type="module"></script>
-    <script src="./components/contract.component.js" type="module"></script>
+    <script src="./components/DateSelector.js" type="module"></script>
+    <script src="./components/Contract.js" type="module"></script>
+    <script src="./components/Result.js" type="module"></script>
   </body>
 </html>
