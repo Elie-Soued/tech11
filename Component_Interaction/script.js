@@ -10,6 +10,7 @@ const dateContainer = document.getElementById("dateContainer");
 const renderedDate = document.getElementById("renderedDate");
 const renderedContract = document.getElementById("renderedContract");
 
+
 //Defining functions that will be used to dynamically the dom
 let date = (element) => html`<p>${element}</p>`;
 let myModule = (object) => html`
@@ -33,6 +34,7 @@ contractComponent.addEventListener("bicycle", () => {
     "The policyholder is happy to insure his new E-Bike also within the contract";
   displayData();
   render(myModule(data.contract.contractModules.BICYCLE), renderedContract);
+
 });
 
 dateComponent.addEventListener("send", (e) => {
@@ -40,11 +42,11 @@ dateComponent.addEventListener("send", (e) => {
   render(date(e.detail.message), renderedDate);
 });
 
-//Helper function
+
 const displayData = () => {
   contractTitle.style.display = "block";
   dateContainer.style.display = "block";
-  initialData.innerHTML = "";
+  initialData.style.display = "none";
 };
 
 //Defining the data that has to be in stringify initially
@@ -68,6 +70,3 @@ const data = {
     },
   },
 };
-
-//Setting the initalData div with the initial stringified data
-initialData.innerHTML = JSON.stringify(data);
