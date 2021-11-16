@@ -4,7 +4,7 @@ template.innerHTML = `
 <input name="validDate" type="date" id="validDate" placeholder="Enter a valid date" />
 </div>`;
 
-class ValidDate extends HTMLElement {
+class DateSelector extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -21,4 +21,4 @@ class ValidDate extends HTMLElement {
   }
 }
 
-customElements.define("app-date", ValidDate);
+customElements.define("app-date-selector", DateSelector);
