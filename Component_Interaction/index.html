@@ -16,27 +16,52 @@
   <body>
     <h1>Component Interaction</h1>
 
-    <!--Date Component-->
-    <app-date id="myValidDate"></app-date>
+   
+   <main>
+    <section>
+      <!--Date Component-->
+      <app-date id="myValidDate"></app-date>
+      <!--Contract Component-->
+      <app-contract id="myContract"></app-contract>
+      <!--Text area element-->
+      <textarea rows="10" cols="30" id="textArea"></textarea>
+    </section>
 
-    <!--Contract Component-->
-    <app-contract id="myContract"></app-contract>
+    <section>
+      <!--Initial Data-->
+      <div id="initialData">
 
-    <!--Text area element-->
-    <textarea rows="10" cols="30" id="textArea"></textarea>
+        <h3 id="introTitle">Bicycle or Household?</h3>
+        <p>
+          If you are looking to make a Bicycle or Household contract, do not look any further.
+          Use the form on the left to build the contract you need.<br>
+          You could choose the date and the type of contract (Bicycle or Household contract)<br>
+          Enjoy! 
+        </p>
+        <div id="imageHolder">
+          <img src="https://cdn.shopify.com/s/files/1/0773/9113/products/RoeblingProfile_1600x.jpg?v=1629750752" alt="bicycle">
+          <img src="https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" alt="house">
+        </div>
 
-    <!--Initial Data-->
-    <div id="initialData"></div>
 
-    <!--Updated contract-->
-    <h3 id="contractTitle">Contract Information</h3>
-    <div id="dateContainer">
-      <h4>Date</h4>
+      </div>
+      <!--Updated contract-->
+      <h3 id="contractTitle">Contract Information</h3>
+
+      <div id="dateContainer">
+        <h4>Date</h4>
       <p id="renderedDate"></p>
-    </div>
-    <div id="contract">
-      <p id="renderedContract"></p>
-    </div>
+      <br>
+      </div>
+      <div id="contract">
+        <p id="renderedContract"></p>
+      </div>
+    </section>
+  </main>
+
+
+
+ 
 
     <!--Back Button-->
     <a href="/index.html">
