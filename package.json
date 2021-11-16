@@ -1,15 +1,23 @@
 {
-  "name": "tech11WebComponent",
+  "name": "tech11-without-LITHTML",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elie-Soued/tech11.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Elie-Soued/tech11/issues"
+  },
+  "homepage": "https://github.com/Elie-Soued/tech11#readme",
   "dependencies": {
-    "lit-html": "^2.0.1"
+    "lit-html": "^2.0.2"
   }
 }
