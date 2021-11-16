@@ -3,7 +3,7 @@ template.innerHTML = `
 
 <style>
 
-.smallSize {
+.smallSize { 
   width: 20%;
 }
 
@@ -90,4 +90,4 @@ template.innerHTML = `
 <button id="reset">Reset</button>
 `;
 
-export{template}
+export { template };

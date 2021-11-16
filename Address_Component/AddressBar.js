@@ -153,6 +153,11 @@ class Address extends HTMLElement {
           this.zip.focus()
         });
     }
+// zip Input Error Handling:
+// The zip input handles 3 kinds of errors :
+// 1- zip out of Range : zip should be  99998 >  zip > 1067
+// 2- zip doesn´t exist : 016289 (example)
+// 3- City exists but there are not district available : 01689 (example)
   };
 }
 

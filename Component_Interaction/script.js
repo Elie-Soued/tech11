@@ -1,41 +1,53 @@
+import { html, render } from "../../node_modules/lit-html/lit-html.js";
+
 //Selecting the elements from the dom
-const myValidDate = document.getElementById("myValidDate");
-const myContract = document.getElementById("myContract");
+const dateComponent = document.getElementById("myValidDate");
+const contractComponent = document.getElementById("myContract");
 const textArea = document.getElementById("textArea");
+const initialData = document.getElementById("initialData");
+const contractTitle = document.getElementById("contractTitle");
+const dateContainer = document.getElementById("dateContainer");
+const renderedDate = document.getElementById("renderedDate");
+const renderedContract = document.getElementById("renderedContract");
+
+
+//Defining functions that will be used to dynamically the dom
+let date = (element) => html`<p>${element}</p>`;
+let myModule = (object) => html`
+  <h4>Type</h4>
+  <p>${object.key}</p>
+  <h4>Name</h4>
+  <p>${object.name}</p>
+  <h4>Comments</h4>
+  <p>${object.comments}</p>
+`;
 
 //Setting Event Listeners
-myContract.addEventListener("household", () => {
+contractComponent.addEventListener("household", () => {
   textArea.innerHTML = "The flat of the policy holder is 100 square meters";
-  delete data.contract.contractModules.BICYCLE;
-  if (!data.contract.contractModules.HOUSEHOLD) {
-    data.contract.contractModules.HOUSEHOLD = {
-      key: "HOUSEHOLD",
-      name: "Household Contents",
-      comments: "The flat of the policy holder is 100 square meters",
-    };
-  }
-  debug.innerText = JSON.stringify(data);
+  displayData();
+  render(myModule(data.contract.contractModules.HOUSEHOLD), renderedContract);
 });
 
-myContract.addEventListener("bicycle", () => {
+contractComponent.addEventListener("bicycle", () => {
   textArea.innerHTML =
     "The policyholder is happy to insure his new E-Bike also within the contract";
-  delete data.contract.contractModules.HOUSEHOLD;
-  if (!data.contract.contractModules.BICYCLE) {
-    data.contract.contractModules.BICYCLE = {
-      key: "BICYCLE",
-      name: "Bicycle",
-      comments:
-        "The policyholder is happy to insure his new E-Bike also within the contract",
-    };
-  }
-  debug.innerText = JSON.stringify(data);
+  displayData();
+  render(myModule(data.contract.contractModules.BICYCLE), renderedContract);
+
 });
 
-myValidDate.addEventListener("send", (e) => {
+dateComponent.addEventListener("send", (e) => {
   data.contract.administrativeData.validFrom = e.detail.message;
-  debug.innerText = JSON.stringify(data);
+  render(date(e.detail.message), renderedDate);
 });
+
+
+const displayData = () => {
+  contractTitle.style.display = "block";
+  dateContainer.style.display = "block";
+  initialData.style.display = "none";
+};
 
 //Defining the data that has to be in stringify initially
 const data = {
@@ -58,5 +70,3 @@ const data = {
     },
   },
 };
-
-debug.innerText = JSON.stringify(data);
