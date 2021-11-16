@@ -72,7 +72,7 @@ template.innerHTML = `
   <label>House Number</label>
   
   <input 
-  type="text"
+  type="number"
    id="houseNumber"
    name="houseNumber"
    required />
