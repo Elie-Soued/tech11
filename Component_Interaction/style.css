@@ -10,45 +10,6 @@ textarea {
   text-align: center;
 }
 
-#contract {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  width: 100%;
-
-  padding-top: 0;
-  margin-top: -3rem;
-}
-
-#contractTitle{
-  width:100%;
-  text-align: center;
-}
-
-#renderedContract {
-  width: 50%;
-  text-align: center;
-}
-
-#renderedDate {
-  text-align: center;
-}
-
-#dateContainer {
-  display: none;
-  width: 100%;
-  text-align: center;
-  display: none;
-}
-
-#contractTitle {
-  display: none;
-}
-
-#selectContract{
- display: none;
-}
-
 section:first-of-type{
   width:40%;
   height:60vh;
@@ -69,26 +30,6 @@ main{
   flex-direction: row;
   justify-content: space-around;
   border:3px solid black;
-  
-}
-
-#initialData{
-  padding:1rem;
-}
-
-
-img{
-  width:100px;
-}
-
-#imageHolder{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-#introTitle{
-  text-align: center;
 }
 
 textarea{
