@@ -1,7 +1,5 @@
 const template = document.createElement("template");
-
 template.innerHTML = ` 
-
 <main>
   <form>
     <input

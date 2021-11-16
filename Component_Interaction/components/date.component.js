@@ -1,5 +1,4 @@
 const template = document.createElement("template");
-
 template.innerHTML = `
 <div>
 <input name="validDate" type="date" id="validDate" placeholder="Enter a valid date" />
