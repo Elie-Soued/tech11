@@ -12,7 +12,7 @@ class Address extends HTMLElement {
 
 
   createAllProperties(){
-    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin","noData"];
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset","noData2", "pinOffRange2","invalidPin2"];
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
     this.addEventListenerToFormProperties();
   }
@@ -68,7 +68,8 @@ class Address extends HTMLElement {
       }
     } else {
       this.clearForm(this.form, this.street, this.district, this.submit);
-      this.noData.style.opacity = "100%";
+      this.zip.className ="form-control is-invalid"
+      this.noData2.innerHTML = "No Data available";
       this.zip.focus();
     }
     return element;
@@ -117,18 +118,20 @@ class Address extends HTMLElement {
 
 
   handleOffRangePin(){
-    this.pinOffRange.style.opacity = "100%";
-    this.noData.style.opacity = "0%";
-    this.invalidPin.style.opacity = "0%";
+    this.zip.className ="form-control is-invalid"
+    this.pinOffRange2.innerHTML = "Zip code should be between 01067 and 99998";
+    this.noData2.innerHTML = "";
+    this.invalidPin2.innerHTML = "";
     this.clearForm(this.form, this.street, this.district, this.submit);
     this.zip.focus()
   }
 
 
   removeErrorAlerts(){
-    this.invalidPin.style.opacity = "0%";
-    this.pinOffRange.style.opacity = "0%";
-    this.noData.style.opacity = "0%";
+    this.zip.className ="form-control"
+    this.pinOffRange2.innerHTML = "";
+    this.invalidPin2.innerHTML = "";
+    this.noData2.innerHTML = "";
   }
 
   
@@ -152,7 +155,8 @@ class Address extends HTMLElement {
         })
         .catch((error) => {
           console.log(error);
-          this.invalidPin.style.opacity = "100%";
+          this.zip.className ="form-control is-invalid"
+          this.invalidPin2.innerHTML = "Zip code is invalid";
           this.clearForm(this.form, this.street, this.district, this.submit);
           this.zip.focus()
         });

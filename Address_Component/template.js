@@ -31,6 +31,8 @@ template.innerHTML = `
 
 
 
+
+
 #firstCol{
   border:2px solid gray;
   padding:2rem;
@@ -47,7 +49,21 @@ button{
   margin:1rem;
 }
 
+hidden{
+  display:none;
+}
+
+show{
+  display: block;
+}
+
 </style>
+
+
+
+
+
+
 
 <div class="container" >
   <div class="row justify-content-center">
@@ -55,9 +71,7 @@ button{
 
      <form id="form">
 
-     <p id="noData">Data not available</p>
-     <p id="pinOffRange">Zip code should be between 01067 and 99998</p>
-     <p id="invalidPin">Zip code is invalid</p>
+
       
       <div class="row">
        <div class="col-12">
@@ -68,6 +82,18 @@ button{
           name="zip"
           class="form-control"
           required />
+
+          <div class="invalid-feedback" id="invalidPin2" >
+          
+          </div>
+
+          <div class="invalid-feedback" id="pinOffRange2">
+        
+        </div>
+
+        <div class="invalid-feedback" id="noData2">
+    
+      </div>
         </div>
       </div>
       
