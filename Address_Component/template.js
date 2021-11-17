@@ -129,19 +129,14 @@ button{
          required />
        </div>  
       </div>
-
-      <div class="row" id="lastrow">
-        <div class="col-12 d-flex justify-content-center" id="col1">
-          <button type ="button" class="btn btn-success" id="submit" disabled>Print</button>
-          <button type ="button" class="btn btn-danger" id="reset" >Reset</button>
-        </div>
-      </div>
-
-    
-    
-
-
      </form>
+
+     <div class="row" id="lastrow">
+     <div class="col-12 d-flex justify-content-center" id="col1">
+       <button type ="button" class="btn btn-success" id="submit" disabled>Print</button>
+       <button type ="button" class="btn btn-danger" id="reset" >Reset</button>
+     </div>
+   </div>
    </div>
  </div>
 </div>
