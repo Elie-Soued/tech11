@@ -36,7 +36,7 @@ class Address extends HTMLElement {
   addAllEventListeners(){
     this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
     this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
-    this.submit.addEventListener("click", ()=>{ this.displayInfo(this.formValueProperties, this.formValueNames, this.shadowRoot);});
+    this.submit.addEventListener("click", ()=>{ this.displayInfo( this.shadowRoot);});
     this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
   }
 
@@ -83,10 +83,14 @@ class Address extends HTMLElement {
   }
 
 
-  displayInfo = (valuesArr, keysArr, shadowRoot) => {
+  displayInfo = (shadowRoot) => {
     const info = {};
-    for (let i = 0; i < keysArr.length; i++) {
-      info[keysArr[i]] = valuesArr[i].value;
+
+    const properties = ["zip","city","district","street","houseNumber","country"];
+    const values = properties.map((key)=> this[key] = this.shadowRoot.getElementById(key))
+
+    for (let i = 0; i < properties.length; i++) {
+      info[properties[i]] = values[i].value;
     }
     const e = document.createElement("div");
     e.innerHTML = JSON.stringify(info);
