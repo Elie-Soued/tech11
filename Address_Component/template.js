@@ -38,9 +38,7 @@ template.innerHTML = `
 
 </style>
 
-<div class="container">
-  <div class="row" id="firstRow">
-    <div class="col-xs-12">
+
     <form id="form">
       <p id="noData">Data not available</p>
       <p id="pinOffRange">Zip code should be between 01067 and 99998</p>
@@ -51,7 +49,6 @@ template.innerHTML = `
           type="number"
           id="zip"
           name="zip"
-          class="form-control"
           required />
         
         <label>City</label>
@@ -98,12 +95,9 @@ template.innerHTML = `
         required />
       </div>
   </form>  
-    </div>
-  </div>
-</div>
 
-<button type ="button" class="btn btn-success" id="submit" disabled>Print</button>
-<button type="button" class=" btn btn-danger" id="reset">Reset</button>
+<button type ="button" id="submit" disabled>Print</button>
+<button type="button"  id="reset">Reset</button>
 
 
 
