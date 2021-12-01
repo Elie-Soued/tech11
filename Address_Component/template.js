@@ -14,11 +14,6 @@ template.innerHTML = `
   width: 40%;
 }
 
-#country {
-  width: 60%;
-}
-
-
 #pinOffRange{
   color:red;
   opacity:0%;
@@ -36,68 +31,141 @@ template.innerHTML = `
 
 
 
+
+
+#firstCol{
+  border:2px solid gray;
+  padding:2rem;
+  border-radius : 10px;
+
+}
+
+#lastrow{
+  padding:1rem;
+}
+
+
+button{
+  margin:1rem;
+}
+
+hidden{
+  display:none;
+}
+
+show{
+  display: block;
+}
+
 </style>
 
 
-    <form id="form">
-      <p id="noData">Data not available</p>
-      <p id="pinOffRange">Zip code should be between 01067 and 99998</p>
-      <p id="invalidPin">Zip code is invalid</p>
-      <div>
+
+
+
+
+
+<div class="container" >
+  <div class="row justify-content-center">
+    <div class="col-3" id="firstCol" >
+
+     <form id="form">
+
+
+      
+      <div class="row">
+       <div class="col-12">
         <label>ZIP</label>
         <input 
           type="number"
           id="zip"
           name="zip"
           required />
+
+          <div class="invalid-feedback" id="invalidPin2" >
+          
+          </div>
+
+          <div class="invalid-feedback" id="pinOffRange2">
         
+        </div>
+
+        <div class="invalid-feedback" id="noData2">
+    
+      </div>
+        </div>
+      </div>
+      
+      <div class="row">
+       <div class="col-12">
         <label>City</label>
-  
-        <input type="text"
-        class="smallSize"
-        id="city"
-        name="city"
-        required />
-  
+         <input 
+           type="text"
+           id="city"
+           name="city"
+           class="form-control"
+           required />
+        </div>  
+       </div>
+
+      <div class="row">
+       <div class="col-12">
         <label>District</label>
-  
-        <select 
-          class="mediumSize"
+        <select class="form-select" 
           id="district"
           name="district"
           required>
         </select>
+       </div>  
       </div>
 
-      <div>
-        <label>Street</label>
-        <select
-          class="mediumSize"
+     
+      <div class="row">
+      <div class="col-12">
+       <label>Street</label>
+       <select class="form-select" 
           id="street"
           name="street"
           required>
         </select>
-      
-        <label>House Number</label>
-  
+       </div>  
+      </div>
+
+      <div class="row">
+      <div class="col-12">
+       <label>House Number</label>
         <input 
-          type="number"
-          id="houseNumber"
-          name="houseNumber"
-          required />
+         type="number"
+         id="houseNumber"
+         name="houseNumber"
+         class="form-control"
+         required />
+       </div>  
       </div>
 
-      <div>
-        <label>Country</label>
-        <input
-        id="country"
-        name="country"
-        required />
+      <div class="row">
+      <div class="col-12">
+       <label>Country</label>
+        <input 
+         type="text"
+         id="country"
+         name="country"
+         class="form-control"
+         required />
+       </div>  
       </div>
-  </form>  
+     </form>
 
-<button type ="button" id="submit" disabled>Print</button>
-<button type="button"  id="reset">Reset</button>
+     <div class="row" id="lastrow">
+     <div class="col-12 d-flex justify-content-center" id="col1">
+       <button type ="button" class="btn btn-success" id="submit" disabled>Print</button>
+       <button type ="button" class="btn btn-danger" id="reset" >Reset</button>
+     </div>
+   </div>
+   </div>
+ </div>
+</div>
+
 
 
 

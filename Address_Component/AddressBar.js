@@ -12,7 +12,7 @@ class Address extends HTMLElement {
 
 
   createAllProperties(){
-    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset", "pinOffRange","invalidPin","noData"];
+    this.keys = ["zip","city","district","street","houseNumber","country","form","submit","reset","noData2", "pinOffRange2","invalidPin2"];
     this.keys.forEach((key) => this[key] = this.shadowRoot.getElementById(key));
     this.addEventListenerToFormProperties();
   }
@@ -36,7 +36,7 @@ class Address extends HTMLElement {
   addAllEventListeners(){
     this.zip.addEventListener("change", (e)=>{this.onTypingZipCode(e, this.city, this.country, this.district)}, );
     this.district.addEventListener("change",(domEvent)=>{ this.onSelect_District(domEvent, this.city, this.street);});
-    this.submit.addEventListener("click", ()=>{ this.displayInfo(this.formValueProperties, this.formValueNames, this.shadowRoot);});
+    this.submit.addEventListener("click", ()=>{ this.displayInfo( this.shadowRoot);});
     this.reset.addEventListener("click", ()=>{ this.clearForm(this.form, this.street, this.district, this.submit);});
   }
 
@@ -68,7 +68,8 @@ class Address extends HTMLElement {
       }
     } else {
       this.clearForm(this.form, this.street, this.district, this.submit);
-      this.noData.style.opacity = "100%";
+      this.zip.className ="form-control is-invalid"
+      this.noData2.innerHTML = "No Data available";
       this.zip.focus();
     }
     return element;
@@ -83,10 +84,14 @@ class Address extends HTMLElement {
   }
 
 
-  displayInfo = (valuesArr, keysArr, shadowRoot) => {
+  displayInfo = (shadowRoot) => {
     const info = {};
-    for (let i = 0; i < keysArr.length; i++) {
-      info[keysArr[i]] = valuesArr[i].value;
+
+    const properties = ["zip","city","district","street","houseNumber","country"];
+    const values = properties.map((key)=> this[key] = this.shadowRoot.getElementById(key))
+
+    for (let i = 0; i < properties.length; i++) {
+      info[properties[i]] = values[i].value;
     }
     const e = document.createElement("div");
     e.innerHTML = JSON.stringify(info);
@@ -113,18 +118,20 @@ class Address extends HTMLElement {
 
 
   handleOffRangePin(){
-    this.pinOffRange.style.opacity = "100%";
-    this.noData.style.opacity = "0%";
-    this.invalidPin.style.opacity = "0%";
+    this.zip.className ="form-control is-invalid"
+    this.pinOffRange2.innerHTML = "Zip code should be between 01067 and 99998";
+    this.noData2.innerHTML = "";
+    this.invalidPin2.innerHTML = "";
     this.clearForm(this.form, this.street, this.district, this.submit);
     this.zip.focus()
   }
 
 
   removeErrorAlerts(){
-    this.invalidPin.style.opacity = "0%";
-    this.pinOffRange.style.opacity = "0%";
-    this.noData.style.opacity = "0%";
+    this.zip.className ="form-control"
+    this.pinOffRange2.innerHTML = "";
+    this.invalidPin2.innerHTML = "";
+    this.noData2.innerHTML = "";
   }
 
   
@@ -148,7 +155,8 @@ class Address extends HTMLElement {
         })
         .catch((error) => {
           console.log(error);
-          this.invalidPin.style.opacity = "100%";
+          this.zip.className ="form-control is-invalid"
+          this.invalidPin2.innerHTML = "Zip code is invalid";
           this.clearForm(this.form, this.street, this.district, this.submit);
           this.zip.focus()
         });
