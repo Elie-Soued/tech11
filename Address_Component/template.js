@@ -80,6 +80,7 @@ show{
           type="number"
           id="zip"
           name="zip"
+          class="form-control"
           required />
 
           <div class="invalid-feedback" id="invalidPin2" >
