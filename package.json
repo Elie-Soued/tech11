@@ -18,7 +18,10 @@
   },
   "homepage": "https://github.com/Elie-Soued/tech11#readme",
   "dependencies": {
+    "@polymer/lit-element": "^0.7.1",
     "bootstrap": "^5.1.3",
-    "lit-html": "^2.0.2"
+    "lit": "^2.0.2",
+    "lit-html": "^2.0.2",
+    "polymer-cli": "^1.9.11"
   }
 }
